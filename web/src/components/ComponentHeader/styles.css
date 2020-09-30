@@ -1,0 +1,20 @@
+.header-principal {
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #8257E5;
+    color: white;
+}
+
+a {
+    margin-left: 40px;
+    list-style: none;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 18px;
+    border: 1px solid #FFFFFF;
+    padding: 10px;
+    border-radius: .25em;
+}
