@@ -13,5 +13,13 @@ export default class ItensCartController {
         const { idProduct } = request.body;
 
         const trx = await db.transaction();
+
+        try {
+            
+        } catch(err) {
+            return response.status(400).json({
+                error: 'Unexpected error while adding product on cart'
+            })
+        }
     }
 }
