@@ -1,86 +1,71 @@
 import { Request, Response } from 'express';
 import db from '../database/connection';
-import bcrypt from 'bcryptjs';
-import dotenvsafe from 'dotenv-safe';
-import jwt from 'jsonwebtoken';
+import AuthMid from '../middleware/auth';
 
+import bcrypt from 'bcryptjs';
 
 export default class UsersController {
 
     //Responsável pela Log in
     async index(request: Request, response: Response) {
+
+        const authmid = new AuthMid();
+        const dataHeader = request.headers.authorization;
         
-        const authHeader = request.headers.authorization;
+        const decrypt = authmid.decrypt(dataHeader as string)!;
 
-        if(!authHeader) {
-            return response.status(401).send({err: 'No value provided'});
+        console.log(decrypt);
+
+        if(decrypt.status === 401) {
+            return response.status(decrypt.status).send({error: decrypt.error});
         }
-
-        const parts = authHeader.split(' ');
-
-        if(parts.length < 2) {
-            return response.status(401).send({err: 'Length incorrectly'})
-        }
-
-        const bufferOBJ = Buffer.from(parts[1], 'base64');
-
-        const datas = Buffer.from(bufferOBJ).toString('utf-8').split(' ');
-
-        const name = datas[0];
-        const password = datas[1];
-
-        dotenvsafe.config();
 
         const pwds = await db.select('password')
             .from('users')
             .where({
-                name
+                name: decrypt.name
             });
+
+        if(pwds.length === 0) {
+            return response.send("Usuário ou senha inválido");
+        }
 
         const pwd = pwds[0];
 
         const ids = await db.select('id')
             .from('users')
             .where({
-                name
+                name: decrypt.name
             });
 
         const id = ids[0];
 
-        const isValidated = bcrypt.compareSync(password, pwd.password);
+        const validate = authmid.login(id, decrypt.password as string, pwd.password);
 
-        if(isValidated) {
-            const token = jwt.sign({ id }, process.env.SECRET as string , {
-                expiresIn: 300//5 Minutes
-            })
-            return response.json({auth: true, token});
-        }
-        else {
-            return response.json({auth: false, token: null})
-        }
+        return response.json(validate);
     }
 
-    async validate(request: Request, response: Response) {
-        
-    }
-
-    //Responsável pela criação do usuário => register
+    // Responsável pela criação do usuário => register
     async create(request: Request, response: Response) {
-        const {
-            name,
-            password
-        } = request.body;
+
+        const authmid = new AuthMid();
+        const dataHeader = request.headers.authorization;
+
+        const decrypt = authmid.decrypt(dataHeader as string);
+
+        if(decrypt.status === 401) {
+            return response.status(decrypt.status).send({error: decrypt.error});
+        }
 
         const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(password, salt);
-
+        const hash = bcrypt.hashSync(decrypt.password as string, salt);
 
         const trx = await db.transaction();
 
         try {
             
             await trx('users').insert({
-                name, 
+                name: decrypt.name,
                 password: hash
             });
 

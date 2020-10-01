@@ -9,7 +9,7 @@ const itensCartController = new ItensCartController();
 const routes = express.Router();
 
 // routes.get('/admin/products', itensController.index);
-routes.post('/admin/products', booksController.create);
+routes.post('/admin/products/add', booksController.create);
 
 //Registrar
 routes.post('/user/register', usersController.create);
@@ -19,6 +19,6 @@ routes.post('/user/login', usersController.index);
 //Listar os itens no carrinho
 routes.get('/user/cart', itensCartController.index);
 //Adicionar os itens no carrinho
-routes.post('/user/cart', itensCartController.create);
+// routes.post('/user/cart', itensCartController.create);
 
 export default routes;
