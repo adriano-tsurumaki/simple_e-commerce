@@ -14,8 +14,6 @@ export default class UsersController {
         
         const decrypt = authmid.decrypt(dataHeader as string, 'Basic');
 
-        // console.log(decrypt);
-
         if(decrypt.status === 401) {
             return response.status(decrypt.status).send({error: decrypt.error});
         }
@@ -48,7 +46,7 @@ export default class UsersController {
 
         const validate = authmid.login(id, password, pwd.password);
 
-        return response.json(validate);
+        return response.status(200).json(validate);
     }
 
     // Responsável pela criação do usuário => register
@@ -90,12 +88,14 @@ export default class UsersController {
             await trx.commit();
 
             response.status(201).json({
-                success: 'Created with success'
+                success: true,
+                msg: 'Created with success'
             })
 
         } catch(err) {
             return response.status(400).json({
-                error: 'Unexpected error while creating new user'
+                success: false,
+                msg: 'Unexpected error while creating new user'
             })
         }
     }

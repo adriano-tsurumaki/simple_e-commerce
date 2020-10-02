@@ -40,12 +40,14 @@ export default class BooksController {
             await trx.commit();
 
             response.status(201).json({
-                success: 'Created with success'
+                success: true,
+                msg: 'Created with success'
             })
 
         } catch(err) {
             return response.status(400).json({
-                error: 'Unexpected error while creating new book'
+                success: false,
+                msg: 'Unexpected error while creating new book'
             });
         }
     }
