@@ -5,14 +5,14 @@ export async function up(knex: Knex) {
         table.increments('id');
         table.integer('quantity').notNullable();
 
-        table.integer('id_livro')
+        table.integer('id_book')
             .notNullable()
             .references('id')
             .inTable('books')
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
         
-        table.integer('id_carrinho')
+        table.integer('id_cart')
             .notNullable()
             .references('id')
             .inTable('carts')

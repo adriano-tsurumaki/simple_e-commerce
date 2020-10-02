@@ -19,6 +19,6 @@ routes.post('/user/login', usersController.index);
 //Listar os itens no carrinho
 routes.get('/user/cart', itensCartController.index);
 //Adicionar os itens no carrinho
-// routes.post('/user/cart', itensCartController.create);
+routes.post('/user/cart', itensCartController.create);
 
 export default routes;

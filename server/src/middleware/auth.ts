@@ -2,9 +2,17 @@ import bcrypt from 'bcryptjs';
 import dotenvsafe from 'dotenv-safe';
 import jwt from 'jsonwebtoken';
 
+interface payloadComponent {
+    id: number;
+}
+
+interface payloadExpired {
+    expired: boolean;
+}
+
 export default class AuthMid {
 
-    decrypt(dataHeader: string) {
+    decrypt(dataHeader: string, typeHeader: string) {
         dotenvsafe.config();
 
         if(!dataHeader) {
@@ -16,27 +24,34 @@ export default class AuthMid {
 
         const parts = dataHeader.split(' ');
 
-        if(parts.length < 2) {
+        if(parts.length !== 2) {
             return {
                 status: 401,
-                error: 'Lenght incorrectly'
+                error: 'Token error'
             }
         }
 
-        const bufferOBJ = Buffer.from(parts[1], 'base64');
+        if(new RegExp('!/^'+ typeHeader +'$/', 'i').test(parts[0])) {
+            return {
+                status: 401,
+                error: 'Token malformatted'
+            };
+        }
 
-        const datas = Buffer.from(bufferOBJ).toString('utf-8').split(process.env.SEPARATOR!.toString());
+        let datas;
 
-        const name = datas[0];
-        const password = datas[1];
-
-        // JSON.parse(`{"name": ${name}, "password": ${password}}`));
+        if(parts[0] === 'Basic') {
+            const bufferOBJ = Buffer.from(parts[1], 'base64');
+            datas = Buffer.from(bufferOBJ).toString('utf-8').split(process.env.SEPARATOR!.toString());
+        }
+        if(parts[0] === 'Bearer') {
+            datas = parts[1];
+        }
 
         return {
-            status: 500,
-            name: name,
-            password: password
-        }
+            status: 200,
+            datas
+        };
     }
 
     login(id: string, passwordReq: string, passwordDB: string) {
@@ -45,7 +60,9 @@ export default class AuthMid {
         const isValidated = bcrypt.compareSync(passwordReq, passwordDB);
 
         if(isValidated) {
-            const token = jwt.sign({ id }, process.env.SECRET as string , {
+            const token = jwt.sign({
+                id: id
+            }, process.env.SECRET as string , {
                 expiresIn: 1200//20 Minutes
             })
             return {auth: true, token};
@@ -55,7 +72,19 @@ export default class AuthMid {
         }
     }
 
-    authentication() {}
+    validation(token: string) {
+        dotenvsafe.config();
+        const secret = process.env.SECRET!;
+        const payload = JSON.parse(this.verify(token, secret));
+        return payload;
+    }
 
-    validation() {}
+    verify(token: string, secret: string) {
+        return JSON.stringify(jwt.verify(token, secret, (err, decoded) => {
+            if(err)
+                return <payloadExpired>{expired: true}
+            else
+                return <payloadComponent>decoded;
+        }))
+    }
 }
