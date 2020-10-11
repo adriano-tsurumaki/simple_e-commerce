@@ -1,17 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import ComponentHeader from '../../components/ComponentHeader';
+import axios from 'axios';
+
+import Header from '../../components/Header';
 
 // import { Link } from 'react-router-dom';
 
 function Cart() {
-    return(
+    // const [list, setList] = useState([{}]);
 
-        <ComponentHeader 
-            title="Carrinho" 
-            url="/"
-            urlTitle="Voltar"
-        />
+    useEffect(() => {
+        const token = localStorage.getItem('token-user');
+        const hash = Buffer.from(token, 'utf-8').toString('base64');
+        axios.get('http://localhost:3333/user/cart', {
+            headers: {
+                'authorization': 'Basic ' + hash
+            }
+        })
+            .then(res => {
+                console.log(res);
+            })
+    }, []);
+
+
+    return(
+        <>
+            <Header />
+            <h1>Cart</h1>
+        </>
 
         // <div className="header">
         //     <h1 title=>Carrinho</h1>

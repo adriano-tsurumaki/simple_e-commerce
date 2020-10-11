@@ -1,0 +1,52 @@
+/* nav, div,input, button, span, a {
+    font-family: 'Montserrat', sans-serif;
+} */
+
+.navbar {
+    height: 2.8rem;
+    width: 100%;
+    display: grid;
+
+    background: var(--color-background-navbar);
+
+    grid-template-columns: repeat(12, 1fr);
+    gap: 20px;
+
+    grid-template-areas:
+        ".  group1  group1  group2  group2  group3  group3  group4  group4  group5  group5  ."
+    ;
+
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, .15);
+}
+
+.category-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 400 1rem Montserrat;
+    color: black;
+    text-decoration: none;
+    border: 1px solid var(--color-background-navbar);
+    transition: border .5s linear, box-shadow .25s linear;
+}
+
+.category-nav:hover {
+    border: 1px solid rgba(0, 0, 0, .3);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+}
+
+.category-nav:nth-child(1) {
+    grid-area: group1;
+}
+.category-nav:nth-child(2) {
+    grid-area: group2;
+}
+.category-nav:nth-child(3) {
+    grid-area: group3;
+}
+.category-nav:nth-child(4) {
+    grid-area: group4;
+}
+.category-nav:nth-child(5) {
+    grid-area: group5;
+}

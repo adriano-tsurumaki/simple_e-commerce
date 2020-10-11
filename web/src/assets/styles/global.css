@@ -1,0 +1,30 @@
+:root {
+    font-family: 'Montserrat', sans-serif;
+    --color-primary: #EA545F;
+    --color-primary-lighter: #fa525d;
+    --color-primary-dark: #d34c55;
+    --color-secundary: #08AEAE;
+    
+    --color-background: #FAFAFA;
+    --color-background-navbar: #F3F3F3;
+
+
+    --color-header-principal: #D7D7D7;
+    --color-header-secundary: #F3F3F3;
+
+    --color-button-text-search: #808080;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    height: 100vh;
+}
+
+body {
+    background: var(--color-background);
+}

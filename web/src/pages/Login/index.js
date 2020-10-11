@@ -20,7 +20,7 @@ function Login() {
             password
         };
 
-        const hash = Buffer.from(`${name} ${password}`, 'utf-8').toString('base64');
+        const hash = Buffer.from(`${name}/<!$3P4R4T0R!>/${password}`, 'utf-8').toString('base64');
 
         loginSchema
             .isValid(archive)
@@ -32,7 +32,8 @@ function Login() {
                 })
                     .then(res => {
                         const { token } = res.data;
-                        console.log('Token recebido com sucesso');
+                        console.log(token);
+                        // console.log('Token recebido com sucesso');
                         localStorage.setItem('token-user', token);
                     });
             });
