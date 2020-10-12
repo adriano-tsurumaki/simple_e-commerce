@@ -2,6 +2,12 @@ div, input, button, span {
     font-family: 'Montserrat', sans-serif;
 }
 
+.header-fixed {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
 .header-principal {
     height: 3.4rem;
     width: 100%;

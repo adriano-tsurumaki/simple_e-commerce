@@ -5,13 +5,13 @@ import Navbar from '../Navbar';
 
 import logo from '../../assets/icons/logo.svg';
 
-import { AiOutlineDown } from 'react-icons/ai';
-
-import { AiOutlineSearch } from 'react-icons/ai';
-
-import { AiOutlineHeart } from 'react-icons/ai';
-import { AiOutlineUser } from 'react-icons/ai';
-import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { 
+    AiOutlineDown, 
+    AiOutlineSearch, 
+    AiOutlineHeart,  
+    AiOutlineUser,
+    AiOutlineShoppingCart
+} from 'react-icons/ai';
 
 import './styles.css';
 
@@ -19,7 +19,7 @@ const ComponentHeader = () => {
     // const url = props.url;
 
     return (
-        <>
+        <div className="header-fixed">
             <div className="header-principal">
 
                 <div className="nav-left">
@@ -54,7 +54,7 @@ const ComponentHeader = () => {
             </div>
 
             <Navbar />
-        </>
+        </div>
     )
 }
 

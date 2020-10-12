@@ -1,24 +1,23 @@
 import React from 'react';
 
 import Header from '../../components/Header';
+// import Banner from './Banner';
+import Slider from '../../components/Slider';
+
+import './styles.css';
 
 function Landing() {
 
-    // function handleAddItem(evt) {
-    // }
-
     return (
+        <>
+            <div className="container-header-flex">
+                <Header />
+                <Slider />
+            </div>
+            <div className="container-list-books">
 
-        <div>
-            <Header />
-
-            <h2>Landing Page</h2>
-        </div>
-
-        // <div className="header">
-        //     <h1>Página Inicial</h1>
-        //     <Link to="/Cart">Carrinho</Link>
-        // </div>
+            </div>
+        </>
     )
 }
 
