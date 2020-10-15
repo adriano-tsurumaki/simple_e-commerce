@@ -1,0 +1,53 @@
+.container-grid-formulation {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F1F1F1;
+}
+
+.container-grid-formulation .form-register {
+    width: 500px;
+    height: 590px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 20px;
+    grid-template-areas:
+        ".  logo-login  logo-login  logo-login  ."
+        ".  logo-login  logo-login  logo-login  ."
+        ".  logo-login  logo-login  logo-login  ."
+        ".  field-user  field-user  field-user  ."
+        ".  field-mail  field-mail  field-mail  ."
+        ".  field-pass  field-pass  field-pass  ."
+        ".  button-val  button-val  button-val  ."
+        ".  opregister  opregister  opregister  ."
+        ".  .           .           .           ."
+    ;
+    background: var(--color-background);
+}
+
+.container-grid-formulation .form-register .logo-center {
+    grid-area: logo-login;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-grid-formulation #input-email {
+    grid-area: field-mail;
+    background: #E9E9E9;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 3px rgba(0,0,0,.18);
+    outline: none;
+    padding-left: 1rem;
+    font: 600 1rem Montserrat;
+    color: #5a5a5a;
+}
+
+.container-grid-formulation #input-email::placeholder {
+    color: #C2C2C2;
+}

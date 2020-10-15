@@ -1,0 +1,39 @@
+.container-grid-book-geral .container-grid-listBook {
+    grid-area: listBook;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 20px;
+    grid-template-areas:
+        "bestBook1  bestBook2  bestBook3  bestBook4"
+        "bestBook5  bestBook6  bestBook7  bestBook8"
+        "bestBook9  bestBook10 bestBook11 bestBook12"
+        "bestBook13 bestBook14 bestBook15 bestBook16"
+    ;
+}
+.container-grid-book-geral .container-grid-listBook .card-best-book {
+    position: relative;
+    /* overflow: hidden; */
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book img {
+    width: 100%;
+    filter: blur(4px);
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book .card-hidden {
+    position: absolute;
+}
+
+.card-best-book .card-star {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.star, .star-half, .star-fill {
+    color: #ffff00;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: .5rem;
+}

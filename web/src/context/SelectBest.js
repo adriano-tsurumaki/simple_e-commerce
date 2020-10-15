@@ -28,5 +28,10 @@ export default function SelectBestProvider({ children }) {
 export function useSelectBest() {
     const context = useContext(SelectBestContext);
     const { option, setOption, selected, setSelected } = context;
-    return { option, setOption, selected, setSelected };
+    return { 
+        option,
+        setOption,
+        selected,
+        setSelected
+    };
 }

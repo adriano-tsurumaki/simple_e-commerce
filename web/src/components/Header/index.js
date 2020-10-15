@@ -43,7 +43,7 @@ const ComponentHeader = () => {
                     <Link to="#" className="anchor-icon">
                         <AiOutlineHeart alt="heart" className="icon"/>
                     </Link>
-                    <Link to="#" className="anchor-icon">
+                    <Link to="/login" className="anchor-icon">
                         <AiOutlineUser alt="user" className="icon" />
                     </Link>
                     <Link to="/cart" className="anchor-icon">

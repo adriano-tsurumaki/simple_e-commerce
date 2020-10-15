@@ -1,0 +1,107 @@
+.container-grid-formulation {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* display: grid;
+    grid-template-rows: repeat(12, 1fr);
+    grid-template-areas:
+        "." "form-login-background" "form-login-background" "form-login-background" "form-login-background" "form-login-background"
+            "form-login-background" "form-login-background" "form-login-background" "form-login-background" "form-login-background" "."
+    ; */
+    background: #F1F1F1;
+}
+
+.container-grid-formulation .form-login {
+    /* grid-area: form-login-background; */
+    width: 500px;
+    height: 590px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 20px;
+    grid-template-areas:
+        ".  logo-login  logo-login  logo-login  ."
+        ".  logo-login  logo-login  logo-login  ."
+        ".  logo-login  logo-login  logo-login  ."
+        ".  field-user  field-user  field-user  ."
+        ".  field-pass  field-pass  field-pass  ."
+        ".  button-val  button-val  button-val  ."
+        ".  opremember  opremember  .           ."
+        ".  opregister  opregister  opregister  ."
+        ".  .           .           .           ."
+    ;
+    background: var(--color-background);
+}
+
+.container-grid-formulation .logo-center {
+    grid-area: logo-login;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-grid-formulation #input-name, .container-grid-formulation #input-password {
+    background: #E9E9E9;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 3px rgba(0,0,0,.18);
+    outline: none;
+    padding-left: 1rem;
+    font: 600 1rem Montserrat;
+    color: #5a5a5a;
+}
+
+.container-grid-formulation #input-name::placeholder, .container-grid-formulation #input-password::placeholder {
+    color: #C2C2C2;
+}
+
+.container-grid-formulation #input-name {
+    grid-area: field-user;
+}
+
+.container-grid-formulation #input-password {
+    grid-area: field-pass;
+}
+
+.container-grid-formulation #button-login {
+    grid-area: button-val;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,.18);
+    outline: none;
+    padding-left: 1rem;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    font: 700 1.25rem Montserrat;
+}
+
+.container-grid-formulation #option-remember, .container-grid-formulation #option-register {
+    font: 600 0.8125rem Montserrat;
+}
+
+.container-grid-formulation #option-remember {
+    grid-area: opremember;
+    display: flex;
+    align-items: center;
+}
+
+.container-grid-formulation #option-remember span {
+    margin-left: .5rem;
+}
+
+.container-grid-formulation #option-register {
+    grid-area: opregister;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-grid-formulation #option-register a {
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-left: 3px;
+}

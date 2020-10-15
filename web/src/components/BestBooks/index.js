@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import SelectBestProvider, { useSelectBest } from '../../context/SelectBest';
+
+import ListingBooks from'../ListingBooks';
 
 import './styles.css';
 
@@ -33,14 +35,6 @@ const OptionNavigator = () => {
     )
 }
 
-const ListingBooks = () => {
-    const {selected} = useSelectBest();
-
-    return (
-        <h1>{selected}</h1>
-    )
-}
-
 const BestBooks = () => {
 
     // const Books = [
@@ -53,12 +47,14 @@ const BestBooks = () => {
 
     return (
         <SelectBestProvider>
-            <div className="container-grid-navigator-geral">
+            <div className="container-grid-book-geral">
                 <div className="container-grid-navigator">
                     <OptionNavigator />
                 </div>
             </div>
-            <ListingBooks />
+            <div className="container-grid-book-geral">
+                <ListingBooks />
+            </div>
         </SelectBestProvider>
     )
 }
