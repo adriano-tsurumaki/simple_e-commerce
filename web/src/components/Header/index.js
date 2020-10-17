@@ -16,7 +16,8 @@ import {
 import './styles.css';
 
 const ComponentHeader = () => {
-    // const url = props.url;
+
+    const isLogged = localStorage.getItem('isLogged');
 
     return (
         <div className="header-fixed">
@@ -43,10 +44,10 @@ const ComponentHeader = () => {
                     <Link to="#" className="anchor-icon">
                         <AiOutlineHeart alt="heart" className="icon"/>
                     </Link>
-                    <Link to="/login" className="anchor-icon">
+                    <Link to={isLogged ? '/user' : '/login'} className="anchor-icon">
                         <AiOutlineUser alt="user" className="icon" />
                     </Link>
-                    <Link to="/cart" className="anchor-icon">
+                    <Link to={isLogged ? '/cart' : '/login'} className="anchor-icon">
                         <AiOutlineShoppingCart alt="cart" className="icon"/>
                     </Link>
                 </div>

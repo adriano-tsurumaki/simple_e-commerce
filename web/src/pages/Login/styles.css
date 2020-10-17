@@ -76,6 +76,12 @@
     background: var(--color-primary);
     color: #FFFFFF;
     font: 700 1.25rem Montserrat;
+    cursor: pointer;
+    transition: background .25s linear;
+}
+
+.container-grid-formulation #button-login:hover {
+    background: var(--color-primary-dark);
 }
 
 .container-grid-formulation #option-remember, .container-grid-formulation #option-register {

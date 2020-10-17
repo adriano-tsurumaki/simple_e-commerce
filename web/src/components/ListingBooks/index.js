@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useSelectBest } from '../../context/SelectBest';
 
 import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
+
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+
+import axios from '../../services/api';
 
 import './styles.css';
 
@@ -46,48 +50,64 @@ const BestOffer = () => {
 }
 
 const BestSeller = () => {
-    // useEffect(() => {
-    //     // Axios here
-    //     /*
-    //         {
-    //             title;
-    //             author;
-    //             price;
-    //             star;
-    //         }
-    //     */
-    // }, []);
+
+    const [books, setBooks] = useState([]);
+
+    const handleAddCart = (id) => {
+        const token = localStorage.getItem('token-user');
+        axios.defaults.headers.authorization = `Bearer ${token}`
+        console.log(axios.defaults.headers);
+        // axios.post('user/cart');
+    }
+
+    const handleAddCart2 = (id) => {
+        const token = localStorage.getItem('token-user');
+        // axios.defaults.headers.authorization = `Bearer ${token}`
+        console.log(axios.defaults.headers);
+        // axios.post('user/cart');
+    }
+
+    useEffect(() => {
+        axios.get('bestsellers/' + 16)
+            .then((response) => {
+                setBooks(response.data);
+            })
+            .catch((err) => {
+                console.log('Ocorreu um erro! ' + err);
+            })
+    }, []);
 
     return (
         <>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-                <StarsRating rating="4.1" />
-                <div className="card-hidden">
-                    
-                </div>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
-            <div className="card-best-book">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/51kcJqp-3-L._SX346_BO1,204,203,200_.jpg" alt="Book 1"/>
-            </div>
+            {books.map((book, index) => {
+                return (
+                    <div className="card-best-book" key={'best-book-'+index}>
+                        <img src={book.img_url_medium} alt="Book 1"/>
+
+                        <StarsRating rating={book.rating} />
+
+                        {/* <div className="show-more">
+                            <span>Show more</span>
+                        </div> */}
+
+                        <AiOutlineShoppingCart
+                            className="card-hidden-cart"
+                            onClick={() => handleAddCart(book.id)}
+                        />
+
+
+                        <div className="card-hidden">
+                        <AiOutlineShoppingCart
+                            className=""
+                            onClick={() => handleAddCart2(book.id)}
+                        />
+                            <h1 className="card-hidden-title">{book.title}</h1>
+                            <h2 className="card-hidden-author">{book.author}</h2>
+                            <h3 className="card-hidden-price">{book.price}</h3>
+                        </div>
+                    </div>
+                )
+            })}
         </>
     )
 }
@@ -98,12 +118,19 @@ const ListingBooks = () => {
     useEffect(() => setSelected('BS'), [setSelected]);
 
     return (
-        <div className="container-grid-listBook">
-            {selected === 'BS' && <BestSeller />}
-            {selected === 'BO' && <BestOffer />}
-            {selected === 'PO' && <PreOrder />}
-            {selected === 'RL' && <Release />}
-        </div>
+        <>
+            <div className="container-grid-listBook">
+                {selected === 'BS' && <BestSeller />}
+                {selected === 'BO' && <BestOffer />}
+                {selected === 'PO' && <PreOrder />}
+                {selected === 'RL' && <Release />}
+                <div className="container-grid-more-books">
+                    <button className="button-show-more">
+                        Show More
+                    </button>
+                </div>
+            </div>
+        </>
     )
 }
 

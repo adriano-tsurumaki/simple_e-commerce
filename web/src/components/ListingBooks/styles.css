@@ -2,33 +2,69 @@
     grid-area: listBook;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr) 100px;
     gap: 20px;
     grid-template-areas:
         "bestBook1  bestBook2  bestBook3  bestBook4"
         "bestBook5  bestBook6  bestBook7  bestBook8"
         "bestBook9  bestBook10 bestBook11 bestBook12"
         "bestBook13 bestBook14 bestBook15 bestBook16"
+        "show-more  show-more  show-more  show-more"
     ;
 }
 .container-grid-book-geral .container-grid-listBook .card-best-book {
     position: relative;
-    /* overflow: hidden; */
+    overflow: hidden;
+    transition: filter .3s linear;
 }
 
 .container-grid-book-geral .container-grid-listBook .card-best-book img {
     width: 100%;
-    filter: blur(4px);
+}
+
+.container-grid-listBook .card-best-book .card-hidden-cart {
+    position: absolute;
+    width: 1.7rem;
+    height: 1.7rem;
+    top: -50%;
+    right: 1rem;
+    color: var(--color-secundary);
+    cursor: pointer;
+    transition: color .25s linear;
 }
 
 .container-grid-book-geral .container-grid-listBook .card-best-book .card-hidden {
     position: absolute;
+    bottom: -50%;
+    padding: .5rem;
+    width: 100%;
+    cursor: default;
+}
+
+.container-grid-listBook .card-best-book .card-hidden .card-hidden-title {
+    margin-bottom: .5rem;
+    font: 700 1.375rem Montserrat;
+    color: #ffffff;
+}
+
+.container-grid-listBook .card-best-book .card-hidden .card-hidden-author {
+    font: 600 1rem Montserrat;
+    padding-bottom: .8rem;
+    border-bottom: 2px solid var(--color-header-principal);
+    color: var(--color-secundary);
+}
+
+.container-grid-listBook .card-best-book .card-hidden .card-hidden-price {
+    font: 600 1.5rem Montserrat;
+    color: var(--color-primary);
+    text-shadow: 0 0 2px var(--color-primary-lighter);
+    margin-top: .8rem;
 }
 
 .card-best-book .card-star {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: -50%;
+    left: 1rem;
 }
 
 .star, .star-half, .star-fill {
@@ -36,4 +72,64 @@
     width: 1.5rem;
     height: 1.5rem;
     margin-left: .5rem;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book .show-more {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    top: -50%;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book .show-more span {
+    color: #FFFFFF;
+    background: var(--color-primary);
+    padding: 1rem;
+    border-radius: 10px;
+    font: 600 1rem Montserrat;
+    cursor: pointer;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover img {
+    filter: blur(4px) brightness(50%);
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover .card-hidden-cart {
+    top: 1rem;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover .card-hidden-cart:hover {
+    color: var(--color-secundary-lighter);
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover .card-hidden {
+    bottom: .5rem;
+    padding: .5rem;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover .card-star {
+    top: 1rem;
+    left: .5rem;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover .show-more {
+    top: 40%;
+}
+
+.container-grid-listBook .container-grid-more-books {
+    grid-area: show-more;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-grid-listBook .container-grid-more-books .button-show-more {
+    padding: 1rem 2rem;
+    font: 500 1.25rem Montserrat;
+    border: none;
+    color: #FFFFFF;
+    background: var(--color-primary);
+    outline: none;
+    cursor: pointer;
 }

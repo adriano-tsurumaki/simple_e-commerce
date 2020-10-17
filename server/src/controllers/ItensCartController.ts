@@ -44,7 +44,7 @@ export default class ItensCartController {
 
             return response.status(200).json({
                 success: true,
-                data: selectedItensCarts
+                list: selectedItensCarts
             })
 
         } catch(err) {
