@@ -3,8 +3,11 @@
     --color-primary: #EA545F;
     --color-primary-lighter: #fa525d;
     --color-primary-dark: #d34c55;
-    --color-secundary: #08AEAE;
-    --color-secundary-lighter: #1debeb;
+    --color-secundary: #5CDB95;
+    --color-secundary-lighter: #8EE4AF;
+    --color-secundary-super-lighter: #EDF5E1;
+    --color-secundary-dark: #379683;
+    --color-secundary-super-dark: #05386B;
     
     --color-background: #FAFAFA;
     --color-background-navbar: #F3F3F3;
@@ -14,6 +17,8 @@
     --color-header-secundary: #F3F3F3;
 
     --color-button-text-search: #808080;
+
+    /* --color-subtitle: # */
 }
 
 * {

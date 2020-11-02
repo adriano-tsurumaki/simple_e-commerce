@@ -16,6 +16,15 @@
     position: relative;
     overflow: hidden;
     transition: filter .3s linear;
+    height: 58vh;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book .card-img {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container-grid-book-geral .container-grid-listBook .card-best-book img {
@@ -89,6 +98,10 @@
     border-radius: 10px;
     font: 600 1rem Montserrat;
     cursor: pointer;
+}
+
+.container-grid-book-geral .container-grid-listBook .card-best-book:hover .card-img {
+    background: #5f5f5f;
 }
 
 .container-grid-book-geral .container-grid-listBook .card-best-book:hover img {

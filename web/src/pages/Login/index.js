@@ -10,9 +10,20 @@ import * as yup from 'yup';
 
 import './styles.css';
 
+const Message = (props) => {
+    return (
+        <div className="notification">
+            {props.msg}
+        </div>
+    )
+}
+
+
 function Login() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+
+    const [anyNotification, setAnyNotification] = useState('');
 
     const history = useHistory();
 
@@ -22,6 +33,16 @@ function Login() {
         email: yup.string().email(),
         password: yup.string().required()
     });
+
+    // const handleEnter = (e, next) => {
+    //     const {key} = e;
+
+    //     if(key === "Enter") {
+    //         if(next) {
+
+    //         }
+    //     }
+    // }
 
     const handleSubmit = () => {
         
@@ -39,7 +60,6 @@ function Login() {
         loginSchema
             .isValid(form)
             .then(valid => {
-                console.log(valid);
                 if(valid) {
                     axios.post('user/login', null, {
                         headers: {
@@ -47,12 +67,18 @@ function Login() {
                         }
                     })
                     .then(res => {
-                        const { token } = res.data;
-                        console.log('token recebido com sucesso');
-                        localStorage.setItem('token-user', token);
-                        localStorage.setItem('isLogged', true);
-                        history.push('/');
+                        const { token, auth, msg } = res.data;
+                        if(auth) {
+                            console.log('token recebido com sucesso');
+                            localStorage.setItem('token-user', token);
+                            localStorage.setItem('isLogged', true);
+                            history.push('/');
+                        } else {
+                            setAnyNotification(true);
+                            console.log(msg);
+                        }
                     });
+                    delete axios.defaults.headers["authorization"];
                 }
             });
     }
@@ -68,14 +94,16 @@ function Login() {
                 </div>
                 <input 
                     type="text" 
-                    onChange={(e) => setName(e.target.value)} 
+                    onChange={(e) => setName(e.target.value)}
+                    // onKeyDown={(e) => handleEnter(e, true)}
                     value={name} 
                     placeholder="E-mail or username"
                     id="input-name"
                 />
                 <input 
                     type="password" 
-                    onChange={(e) => setPassword(e.target.value)} 
+                    onChange={(e) => setPassword(e.target.value)}
+                    // onKeyDown={(e) => handleEnter(e, false)}
                     value={password}
                     placeholder="Password"
                     id="input-password"
@@ -84,7 +112,7 @@ function Login() {
                 <button onClick={handleSubmit} id="button-login">Log in</button>
 
                 <div id="option-remember">
-                    <input type="checkbox" id=""/>
+                    <input type="checkbox" />
                     <span>Remember me</span>
                 </div>
 
@@ -95,6 +123,8 @@ function Login() {
                     </Link>
                 </div>
             </div>
+
+            { anyNotification && <Message msg="okay" /> }
         </div>
     )
 }

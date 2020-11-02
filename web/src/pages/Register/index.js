@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import logoFav from '../../assets/icons/favicon.svg';
+
+import axios from '../../services/api';
+import * as yup from 'yup';
+
 
 import './styles.css';
 
@@ -10,6 +14,44 @@ function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const history = useHistory();
+
+
+    const loginSchema = yup.object().shape({
+        name: yup.string().required(),
+        email: yup.string().email().required(),
+        password: yup.string().required()
+    });
+
+    const handleSubmit = () => {
+        const archive = {
+            name,
+            email,
+            password
+        }
+
+        loginSchema
+            .isValid(archive)
+            .then(valid => {
+                if(valid) {
+                    const hash = Buffer.from(`${name}/<!$3P4R4T0R!>/${password}/<!$3P4R4T0R!>/${email}`, 'utf-8').toString('base64');
+                    axios.defaults.headers.authorization = `Basic ${hash}`;
+                    axios.post('/user/register')
+                        .then(res => {
+                            console.log(res);
+                            const { token } = res.data;
+                            localStorage.setItem('token-user', token);
+                            localStorage.setItem('isLogged', true);
+                            history.push('/');
+                        })
+                        .catch(err => console.log('Ocorreu um erro! ' + err));
+                    delete axios.defaults.headers["authorization"];
+                }
+            })
+        delete axios.defaults.headers["authorization"];
+        
+    }
 
     return (
         <div className="container-grid-formulation">
@@ -44,7 +86,13 @@ function Register() {
                     id="input-password"
                 />
 
-                <button type="submit" id="button-login">Sign up</button>
+                <button 
+                    type="submit" 
+                    id="button-login"
+                    onClick={handleSubmit}
+                >
+                    Sign up
+                </button>
 
                 <div id="option-register">
                     <span>Already have an account?</span>

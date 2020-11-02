@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import { useSelectBest } from '../../context/SelectBest';
 
 import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
@@ -53,24 +55,33 @@ const BestSeller = () => {
 
     const [books, setBooks] = useState([]);
 
+    const history = useHistory();
+
     const handleAddCart = (id) => {
         const token = localStorage.getItem('token-user');
-        axios.defaults.headers.authorization = `Bearer ${token}`
-        console.log(axios.defaults.headers);
+        axios.defaults.headers.authorization = `Bearer ${token}`;
+        axios.post('user/cart', {id_book: id})
+            .then((res) => {
+                const { auth, redirectForLogin } = res.data;
+                if(redirectForLogin) {
+                    history.push('/login');
+                }
+                if(!auth)
+                    console.log(res.data);
+
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Catch: ' + err.res.data.error)
+            })
+        delete axios.defaults.headers["authorization"];
         // axios.post('user/cart');
     }
-
-    const handleAddCart2 = (id) => {
-        const token = localStorage.getItem('token-user');
-        // axios.defaults.headers.authorization = `Bearer ${token}`
-        console.log(axios.defaults.headers);
-        // axios.post('user/cart');
-    }
-
     useEffect(() => {
         axios.get('bestsellers/' + 16)
             .then((response) => {
                 setBooks(response.data);
+                console.log(response.data);
             })
             .catch((err) => {
                 console.log('Ocorreu um erro! ' + err);
@@ -82,7 +93,9 @@ const BestSeller = () => {
             {books.map((book, index) => {
                 return (
                     <div className="card-best-book" key={'best-book-'+index}>
-                        <img src={book.img_url_medium} alt="Book 1"/>
+                        <div className="card-img">
+                            <img src={book.img_url_medium} alt="Book 1"/>
+                        </div>
 
                         <StarsRating rating={book.rating} />
 
@@ -95,12 +108,7 @@ const BestSeller = () => {
                             onClick={() => handleAddCart(book.id)}
                         />
 
-
                         <div className="card-hidden">
-                        <AiOutlineShoppingCart
-                            className=""
-                            onClick={() => handleAddCart2(book.id)}
-                        />
                             <h1 className="card-hidden-title">{book.title}</h1>
                             <h2 className="card-hidden-author">{book.author}</h2>
                             <h3 className="card-hidden-price">{book.price}</h3>
