@@ -21,7 +21,10 @@ export default class ItensCartController {
         const payload = authmid.validation(String(decrypt.datas));
 
         if(payload.expired) {
-            return response.status(200).send({auth: false, session: 'Token is expired!'});
+            return response.status(200).send({
+                auth: false,
+                redirectForLogin: true,
+                session: 'Token is expired!'});
         }
 
         const id_user = payload.id;
@@ -31,26 +34,49 @@ export default class ItensCartController {
         try {
 
             const selectedIdsCartUser = await trx('carts')
-                .select('id')
+                .select('id', 'total')
                 .where({id_user});
 
             const id_cart = selectedIdsCartUser[0].id;
+            const total = selectedIdsCartUser[0].total;
 
             const selectedItensCarts = await trx('itens_cart')
-                .select('*')
+                .select('id_book', 'id')
                 .where({id_cart});
+
+            const listBooks = await Promise.all(selectedItensCarts.map(async (item) => {
+                const book = await trx("books")
+                    .select('id', 'title', 'author', 'image', 'price')
+                    .where({id: item.id_book})
+                return {...book, id_item: item.id};
+            }));
+
+            
+            // const selectedBooks = selectedItensCarts.map(async itens => {
+            //     return await trx('books')
+            //     .select('*')
+            //     .where({id: itens.id_book});
+            // });
+
+            // console.log(selectedBooks);
 
             trx.commit();
 
             return response.status(200).json({
-                success: true,
-                list: selectedItensCarts
+                auth: true,
+                redirectForLogin: false,
+                list: listBooks,
+                total
             })
 
         } catch(err) {
-            return response.status(400).json({
-                success: false,
-                msg: 'Unexpected error while listing products on cart!' + err
+
+            await trx.rollback();
+
+            return response.status(201).json({
+                auth: false,
+                redirectForLogin: false,
+                msg: 'Unexpected error while listing products on cart!',
             })
         }
     }
@@ -61,6 +87,7 @@ export default class ItensCartController {
         const dataHeader = request.headers.authorization;
 
         const decrypt = authmid.decrypt(dataHeader as string, 'Bearer');
+
         if(decrypt.error) {
             return response.status(decrypt.status).send({error: decrypt.error});
         }
@@ -71,7 +98,11 @@ export default class ItensCartController {
         const payload = authmid.validation(String(decrypt.datas));
 
         if(payload.expired) {
-            return response.status(200).send({auth: false, session: 'Token is expired!'});
+            return response.status(200).send({
+                auth: false,
+                redirectForLogin: true,
+                session: 'Token is expired!'
+            });
         }
 
         const id_user = payload.id;
@@ -83,28 +114,163 @@ export default class ItensCartController {
                 .select('id')
                 .where({id_user});
 
-            
             const id_cart = insertedIdsCartUser[0].id;
 
+            const isInserted = await trx('itens_cart')
+                .select('id_book')
+                .where({id_cart, id_book});
+
+            if(isInserted.length !== 0) {
+                await trx.commit();
+
+                return response.status(201).json({
+                    auth: false,
+                    redirectForLogin: false,
+                    msg: "Item already added on cart!"
+                });
+            }
+
+            /*------------------------------------------------------*/
+            //Atualizando o total do carrinho
+
+            const selectedTotalCarts = await trx('carts')
+                .select('total')
+                .where({id_user});
+
+            const total = selectedTotalCarts[0].total;
+
+            const selectedPriceBooks = await trx('books')
+                .select('price')
+                .where({id: id_book})
+
+            const price = selectedPriceBooks[0].price;
+
+            await trx('carts')
+                .update({total: total + price})
+                .where({
+                    id: id_cart,
+                    id_user
+                })
+
+            /*------------------------------------------------------*/
             
             await trx('itens_cart').insert({
                 id_book,
-                id_cart,
-                quantity: 1
+                id_cart
             })
             
             await trx.commit();
 
             return response.status(201).json({
-                success: true,
+                auth: true,
+                redirectForLogin: false,
                 msg: "Item added with successfully"
             });
 
         } catch(err) {
-            return response.status(400).json({
-                success: false,
-                msg: 'Unexpected error while adding product on cart!' + err
+
+            await trx.rollback();
+
+            return response.status(201).json({
+                auth: false,
+                redirectForLogin: false,
+                msg: 'Unexpected error while adding product on cart! Error: ' + err
             })
+        }
+    }
+
+    async destroy(request: Request, response: Response) {
+
+        const authmid = new AuthMid();
+        const dataHeader = request.headers.authorization;
+
+        const decrypt = authmid.decrypt(dataHeader as string, 'Basic');
+        if(decrypt.error) {
+            return response.status(decrypt.status).send({error: decrypt.error});
+        }
+        if(!decrypt.datas) {
+            return response.status(decrypt.status).send({error: "No datas provided"});
+        }
+
+        const [token, id_item] = decrypt.datas;
+
+        const payload = authmid.validation(String(token));
+
+        if(payload.expired) {
+            return response.status(200).send({
+                auth: false,
+                redirectForLogin: true,
+                session: 'Token is expired!'
+            });
+        }
+
+        const { id, cart_id } = payload;
+
+        console.log(cart_id);
+
+        // return response.status(200).send({
+        //     auth: true,
+        //     redirectForLogin: false,
+        //     session: 'Token is expired!'});
+
+        const trx = await db.transaction();
+
+        try {
+
+            const selectedIdsBooks = await trx('itens_cart')
+                .select('id_book')
+                .where({id: id_item});
+
+            const id_book = selectedIdsBooks[0].id_book;
+
+            const selectedPricesBooks = await trx('books')
+                .select('price')
+                .where({id: id_book});
+            
+            const price_book = selectedPricesBooks[0].price;
+
+            const selectedTotalsCarts = await trx('carts')
+                .select('total')
+                .where({
+                    id: cart_id,
+                    id_user: id
+                });
+
+            // console.log({id_book, price_book, selectedTotalsCarts, id, cart_id});
+                
+            const total = selectedTotalsCarts[0].total;
+
+            await trx('carts')
+                .update({total: total - price_book})
+                .where({
+                    id: cart_id,
+                    id_user: id
+                })
+
+            await trx('itens_cart')
+                .where({id: id_item})
+                .del();
+
+            trx.commit();
+
+            return response.status(200).send({
+                auth: true,
+                total: total - price_book,
+                redirectForLogin: false,
+            });
+        } 
+        catch(err) {
+
+            trx.rollback();
+
+            console.log(err);
+
+            return response.status(201).json({
+                auth: false,
+                redirectForLogin: false,
+                msg: 'Unexpected error while deleting item cart!',
+            })
+
         }
     }
 }

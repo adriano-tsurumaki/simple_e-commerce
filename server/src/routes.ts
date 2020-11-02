@@ -4,160 +4,74 @@ import ItensCartController from './controllers/ItensCartController';
 import UsersController from './controllers/UsersController';
 import AuthMid from './middleware/auth';
 
+import db from './database/connection';
+
 const usersController = new UsersController();
 const booksController = new BooksController();
 const itensCartController = new ItensCartController();
 const routes = express.Router();
-const authmid = new AuthMid();
 
 // routes.get('/admin/products', itensController.index);
 routes.post('/admin/products/add', booksController.create);
 
+routes.get('/user', usersController.index);
+
 //Registrar
 routes.post('/user/register', usersController.create);
 //Logar
-routes.post('/user/login', usersController.index);
+routes.post('/user/login', usersController.login);
 
 //Adicionar os itens no carrinho
 routes.post('/user/cart', itensCartController.create);
 //Listar os itens no carrinho
 routes.get('/user/cart', itensCartController.index);
+//Excluir um item no carrinho
+routes.delete('/user/cart', itensCartController.destroy);
 
 //Retorna os dados 
-routes.get('/bestsellers/:quantity', (request, response) => {
-    console.log(request.params.quantity);
+routes.get('/bestsellers/:quantity', async (request, response) => {
+    // console.log(request.params.quantity);
 
-    const books = [{
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51CumRhePVL._SX346_BO1,204,203,200_.jpg',
-        title: 'O nome do vento',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '5.0',
-        id: 1
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51YG16TP6LL._SX346_BO1,204,203,200_.jpg',
-        title: 'O temor do sábio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '4.5',
-        id: 2
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51G92GMIluL._SX346_BO1,204,203,200_.jpg',
-        title: 'A música do silêncio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 16,05',
-        rating: '4.5',
-        id: 3
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51NjUyqABrL._SX446_BO1,204,203,200_.jpg',
-        title: 'Box Sherlock Holmes',
-        author: 'Arthur Conan Doyle',
-        price: 'R$ 58,41',
-        rating: '5.0',
-        id: 4
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51CumRhePVL._SX346_BO1,204,203,200_.jpg',
-        title: 'O nome do vento',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '5.0',
-        id: 5
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51YG16TP6LL._SX346_BO1,204,203,200_.jpg',
-        title: 'O temor do sábio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '4.5',
-        id: 6
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51G92GMIluL._SX346_BO1,204,203,200_.jpg',
-        title: 'A música do silêncio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 16,05',
-        rating: '4.5',
-        id: 7
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51NjUyqABrL._SX446_BO1,204,203,200_.jpg',
-        title: 'Box Sherlock Holmes',
-        author: 'Arthur Conan Doyle',
-        price: 'R$ 58,41',
-        rating: '5.0',
-        id: 8
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51CumRhePVL._SX346_BO1,204,203,200_.jpg',
-        title: 'O nome do vento',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '5.0',
-        id: 9
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51YG16TP6LL._SX346_BO1,204,203,200_.jpg',
-        title: 'O temor do sábio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '4.5',
-        id: 10
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51G92GMIluL._SX346_BO1,204,203,200_.jpg',
-        title: 'A música do silêncio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 16,05',
-        rating: '4.5',
-        id: 11
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51NjUyqABrL._SX446_BO1,204,203,200_.jpg',
-        title: 'Box Sherlock Holmes',
-        author: 'Arthur Conan Doyle',
-        price: 'R$ 58,41',
-        rating: '5.0',
-        id: 12
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51CumRhePVL._SX346_BO1,204,203,200_.jpg',
-        title: 'O nome do vento',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '5.0',
-        id: 13
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51YG16TP6LL._SX346_BO1,204,203,200_.jpg',
-        title: 'O temor do sábio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 35,91',
-        rating: '4.5',
-        id: 14
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51G92GMIluL._SX346_BO1,204,203,200_.jpg',
-        title: 'A música do silêncio',
-        author: 'Patrick Rothfuss',
-        price: 'R$ 16,05',
-        rating: '4.5',
-        id: 15
-    },
-    {
-        img_url_medium: 'https://images-na.ssl-images-amazon.com/images/I/51NjUyqABrL._SX446_BO1,204,203,200_.jpg',
-        title: 'Box Sherlock Holmes',
-        author: 'Arthur Conan Doyle',
-        price: 'R$ 58,41',
-        rating: '5.0',
-        id: 16
-    },]
+    const quantity = Number(request.params.quantity);
 
-    return response.status(201).json(books)
+    const trx = await db.transaction();
+
+    try {
+        const selectedBestBooks = await trx('books')
+            .select('title', 'author', 'image', 'price', 'rating', 'id')
+            .offset(0)
+            .limit(quantity);
+
+        // console.log(selectedBestBooks);
+
+        trx.commit();
+
+        const listBestBooks = selectedBestBooks.map(selected => {
+            const { image, ...rest } = selected;
+            return {
+                img_url_medium: image,
+                ...rest
+            }
+        });
+
+        return response.status(201).json(listBestBooks);
+    }
+    catch(err) {
+        return response.status(400).json({
+            success: false,
+            msg: 'Unexpected error while listing best seller',
+            error: err
+        })
+    }
 })
 
 
 export default routes;
+
+// index – Lista os dados da tabela
+// show – Mostra um item específico
+// create – Retorna a View para criar um item da tabela
+// store – Salva o novo item na tabela
+// edit – Retorna a View para edição do dado
+// update – Salva a atualização do dado
+// destroy – Remove o dado

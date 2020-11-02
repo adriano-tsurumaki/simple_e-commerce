@@ -6,8 +6,37 @@ import bcrypt from 'bcryptjs';
 
 export default class UsersController {
 
-    //Responsável pela Log in
     async index(request: Request, response: Response) {
+        
+        const authmid = new AuthMid();
+        const dataHeader = request.headers.authorization;
+
+        console.log(dataHeader);
+
+        const decrypt = authmid.decrypt(dataHeader as string, 'Bearer');
+
+        console.log(decrypt);
+
+        if(decrypt.status === 401) {
+            return response.status(decrypt.status).send({error: decrypt.error});
+        }
+        if(!decrypt.datas) {
+            return response.status(decrypt.status).send({error: "No datas provided"});
+        }
+
+        const payload = authmid.validation(String(decrypt.datas));
+
+        console.log(payload);
+
+        if(payload.expired) {
+            return response.status(200).send({auth: false, session: 'Token is expired!'});
+        }
+
+        return response.status(201).send({auth: true});
+    }
+
+    //Responsável pela Log in
+    async login(request: Request, response: Response) {
 
         const authmid = new AuthMid();
         const dataHeader = request.headers.authorization;
@@ -31,7 +60,7 @@ export default class UsersController {
             });
 
         if(pwds.length === 0) {
-            return response.send("Usuário ou senha inválido");
+            return response.send({auth: false, msg: "Usuário ou senha inválido"});
         }
 
         const pwd = pwds[0];
@@ -44,8 +73,16 @@ export default class UsersController {
 
         const id = ids[0].id;
 
-        const validate = authmid.login(id, password, pwd.password);
+        const cart_ids = await db.select('id')
+            .from('carts')
+            .where({
+                id_user: id
+            })
 
+        const cart_id = cart_ids[0].id;
+
+        const validate = authmid.login(id, cart_id, password, pwd.password);
+        
         return response.status(200).json(validate);
     }
 
@@ -66,6 +103,7 @@ export default class UsersController {
 
         const name = decrypt.datas[0];
         const password = decrypt.datas[1];
+        const email = decrypt.datas[2];
 
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password as string, salt);
@@ -75,26 +113,38 @@ export default class UsersController {
         try {
             
             const insertedUsersIds = await trx('users').insert({
-                name: name,
-                password: hash
+                name,
+                password: hash,
+                email
             });
 
             const id_user = insertedUsersIds[0];
 
-            await trx('carts').insert({
-                id_user
+            const insertedCartsIds = await trx('carts').insert({
+                id_user,
+                total: 0
             })
+
+            const id_cart = insertedCartsIds[0];
 
             await trx.commit();
 
+            const validate = authmid.login(id_user.toString(), id_cart.toString(), password, hash);
+
             response.status(201).json({
-                success: true,
+                auth: validate.auth,
+                token: validate.token,
+                redirectForLogin: false,
                 msg: 'Created with success'
             })
 
         } catch(err) {
+
+            await trx.rollback();
+
             return response.status(400).json({
-                success: false,
+                auth: false,
+                redirectForLogin: true,
                 msg: 'Unexpected error while creating new user'
             })
         }

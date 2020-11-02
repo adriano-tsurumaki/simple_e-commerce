@@ -7,11 +7,16 @@ export async function up(knex: Knex) {
         table.string('author').notNullable();
         table.string('image').notNullable();
         table.text('desc').notNullable();
-        table.date('date').notNullable();
+        table.string('date').notNullable();
         table.double('price').notNullable();
+
+        //O Rating será posto aqui temporariamente
+        table.float('rating').notNullable();
+
+        //Futuramente será separado para uma outra tabela
         table.integer('page').notNullable();
         table.string('dimension').notNullable();
-        table.integer('isbn').notNullable();
+        table.string('isbn').notNullable();
     });
 }
 

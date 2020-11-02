@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 interface payloadComponent {
     id: number;
+    id_cart: number;
 }
 
 interface payloadExpired {
@@ -17,7 +18,7 @@ export default class AuthMid {
 
         if(!dataHeader) {
             return {
-                status: 401,
+                status: 201,
                 error: 'No value provided!'
             }
         }
@@ -26,14 +27,14 @@ export default class AuthMid {
 
         if(parts.length !== 2) {
             return {
-                status: 401,
+                status: 201,
                 error: 'Token error'
             }
         }
 
         if(new RegExp('!/^'+ typeHeader +'$/', 'i').test(parts[0])) {
             return {
-                status: 401,
+                status: 201,
                 error: 'Token malformatted'
             };
         }
@@ -54,16 +55,17 @@ export default class AuthMid {
         };
     }
 
-    login(id: string, passwordReq: string, passwordDB: string) {
+    login(id: string, cart_id: string, passwordReq: string, passwordDB: string) {
         dotenvsafe.config();
 
         const isValidated = bcrypt.compareSync(passwordReq, passwordDB);
 
         if(isValidated) {
             const token = jwt.sign({
-                id: id
+                id: id,
+                cart_id: cart_id
             }, process.env.SECRET as string , {
-                expiresIn: 1200//20 Minutes
+                expiresIn: 3600//1 Hour
             })
             return {auth: true, token};
         }

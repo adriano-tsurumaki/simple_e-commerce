@@ -46,7 +46,7 @@ export default class BooksController {
 
         } catch(err) {
             return response.status(400).json({
-                success: false,
+                redirectForLogin: false,
                 msg: 'Unexpected error while creating new book'
             });
         }
