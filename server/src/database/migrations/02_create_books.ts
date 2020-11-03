@@ -8,7 +8,7 @@ export async function up(knex: Knex) {
         table.string('image').notNullable();
         table.text('desc').notNullable();
         table.string('date').notNullable();
-        table.double('price').notNullable();
+        table.decimal('price', 14, 2).notNullable();
 
         //O Rating será posto aqui temporariamente
         table.float('rating').notNullable();

@@ -12,6 +12,27 @@
     --color-background: #FAFAFA;
     --color-background-navbar: #F3F3F3;
 
+    --alert-success-background: #C2F3D6;
+    --alert-success-border-left: #30D372;
+    --alert-success-background-close: #96EAB8;
+    --alert-success-font: #56A675;
+
+    --alert-warning-background: #FEDB9B;
+    --alert-warning-border-left: #FEA600;
+    --alert-warning-background-close: #FFD080;
+    --alert-warning-font: #C59343;
+
+    --alert-info-background: #D6F0FF;
+    --alert-info-border-left: #76C9FD;
+    --alert-info-background-close: #99D9FF;
+    --alert-info-font: #4DB2F1;
+
+    --alert-danger-background: #FFE1E3;
+    --alert-danger-border-left: #FF4356;
+    --alert-danger-background-close: #FF99A4;
+    --alert-danger-font: #DD5872;
+
+
 
     --color-header-principal: #D7D7D7;
     --color-header-secundary: #F3F3F3;

@@ -14,6 +14,7 @@ import Header from '../../components/Header';
 
 function Cart() {
 
+
     const initClose = useRef(true);
 
     const [listCarts, setListCarts] = useState([]);
@@ -80,25 +81,6 @@ function Cart() {
         delete axios.defaults.headers["authorization"];
     }, []);
 
-    // const handleRemoveItem = (id_item, key) => {
-    //     if(!canClick) {
-    //         console.log("Não pode!");
-    //         return false;
-    //     }
-    //     setCanClick(false);
-    //     const token = localStorage.getItem('token-user');
-    //     const str = `${token}/<!$3P4R4T0R!>/${id_item}`;
-    //     const hash = Buffer.from(str, 'utf-8').toString('base64');
-    //     axios.defaults.headers.authorization = `Basic ${hash}`;
-    //     axios.delete('user/cart')
-    //         .then(res => {
-    //             setKeyList(key);
-    //             setCanClick(true);
-    //             setTotalCheck(res.data.total);
-    //         });
-    //     delete axios.defaults.headers["authorization"];
-    // }
-
     useEffect(() => {
         if(isReceived) {
             console.log({isReceived});
@@ -142,6 +124,8 @@ function Cart() {
 
         setListCarts([...elements]);
     }, [receiveCarts, isReceived, handleRemoveItem]);
+
+
 
     return(
         <>

@@ -51,15 +51,6 @@ export default class ItensCartController {
                 return {...book, id_item: item.id};
             }));
 
-            
-            // const selectedBooks = selectedItensCarts.map(async itens => {
-            //     return await trx('books')
-            //     .select('*')
-            //     .where({id: itens.id_book});
-            // });
-
-            // console.log(selectedBooks);
-
             trx.commit();
 
             return response.status(200).json({
@@ -145,8 +136,12 @@ export default class ItensCartController {
 
             const price = selectedPriceBooks[0].price;
 
+            const numFixed = parseFloat((price + total).toFixed(2));
+
+            console.log({price, total, numFixed});
+
             await trx('carts')
-                .update({total: total + price})
+                .update({total: numFixed})
                 .where({
                     id: id_cart,
                     id_user
@@ -206,13 +201,6 @@ export default class ItensCartController {
 
         const { id, cart_id } = payload;
 
-        console.log(cart_id);
-
-        // return response.status(200).send({
-        //     auth: true,
-        //     redirectForLogin: false,
-        //     session: 'Token is expired!'});
-
         const trx = await db.transaction();
 
         try {
@@ -236,12 +224,13 @@ export default class ItensCartController {
                     id_user: id
                 });
 
-            // console.log({id_book, price_book, selectedTotalsCarts, id, cart_id});
                 
             const total = selectedTotalsCarts[0].total;
 
+            const numFixed = parseFloat((total - price_book).toFixed(2));
+
             await trx('carts')
-                .update({total: total - price_book})
+                .update({total: numFixed})
                 .where({
                     id: cart_id,
                     id_user: id
@@ -255,7 +244,7 @@ export default class ItensCartController {
 
             return response.status(200).send({
                 auth: true,
-                total: total - price_book,
+                total: numFixed,
                 redirectForLogin: false,
             });
         } 
