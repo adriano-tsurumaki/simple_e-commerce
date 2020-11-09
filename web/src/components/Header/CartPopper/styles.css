@@ -1,0 +1,43 @@
+.popper-geral .card-buyable {
+    display: flex;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,.2);
+}
+
+.popper-geral .card-buyable .card-item-image {
+    width: 6rem;
+}
+
+.popper-geral .card-buyable .card-item-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.popper-geral .card-buyable .card-item-description {
+    margin-left: 1rem;
+}
+
+.popper-geral .card-buyable .card-item-description span {
+    display: block;
+}
+
+.popper-geral .card-buyable .card-item-description .title {
+    font: 700 1rem Montserrat;
+}
+
+.popper-geral .card-buyable .card-item-description .author {
+    font: 500 .8rem Montserrat;
+    color: rgba(0,0,0,.5);
+    margin-top: .6rem;
+}
+
+.popper-geral .card-buyable .card-item-description .price {
+    margin-top: 2rem;
+    font: 700 1rem Montserrat;
+}
+
+.popper-geral .popper-total-cart {
+    font: 700 1.2rem Montserrat;
+    margin-bottom: 1rem;
+}

@@ -52,12 +52,11 @@ const BestSeller = ({ alertMsg, dispatch }) => {
             .then((res) => {
                 const { auth, redirectForLogin } = res.data;
                 if(redirectForLogin) {
+                    dispatch(addAnyMessage(res.data.msg, 'info'));
                     history.push('/login');
-                }
-                if(!auth) {
+                } else if(!auth) {
                     dispatch(addAnyMessage(res.data.msg, 'warning'));
-                }
-                else {
+                } else {
                     dispatch(addAnyMessage(res.data.msg, 'success'));
                 }
                 
@@ -69,7 +68,7 @@ const BestSeller = ({ alertMsg, dispatch }) => {
     }
 
     useEffect(() => {
-        axios.get('bestsellers/' + 16)
+        axios.get('index/bestsellers/' + 16)
             .then((response) => {
                 setBooks(response.data);
             })

@@ -5,12 +5,13 @@ import Navbar from '../Navbar';
 
 import logo from '../../assets/icons/logo.svg';
 
+import CartPopper from './CartPopper';
+import WishListPopper from './WishListPopper';
+import UserPopper from './UserPopper';
+
 import { 
     AiOutlineDown, 
     AiOutlineSearch, 
-    AiOutlineHeart,  
-    AiOutlineUser,
-    AiOutlineShoppingCart
 } from 'react-icons/ai';
 
 import './styles.css';
@@ -18,6 +19,7 @@ import './styles.css';
 const ComponentHeader = () => {
 
     const isLogged = localStorage.getItem('isLogged');
+    console.log(isLogged);
 
     return (
         <div className="header-fixed">
@@ -41,15 +43,15 @@ const ComponentHeader = () => {
                 </div>
 
                 <div className="nav-right">
-                    <Link to="#" className="anchor-icon">
-                        <AiOutlineHeart alt="heart" className="icon"/>
-                    </Link>
-                    <Link to={isLogged ? '/user' : '/login'} className="anchor-icon">
-                        <AiOutlineUser alt="user" className="icon" />
-                    </Link>
-                    <Link to={isLogged ? '/cart' : '/login'} className="anchor-icon">
-                        <AiOutlineShoppingCart alt="cart" className="icon"/>
-                    </Link>
+                    <div className="popper popper--wishlist">
+                        <WishListPopper />
+                    </div>
+                    <div className="popper">
+                        <CartPopper />
+                    </div>
+                    <div className="popper popper--user">
+                        <UserPopper isLogged={isLogged} />
+                    </div>
                 </div>
 
             </div>

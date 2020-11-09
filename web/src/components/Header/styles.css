@@ -126,19 +126,21 @@ div, input, button, span {
     border-left: none;
 }
 
-/* .search-button {
-    width: 3.4rem;
-}
-
-.search-button {
-    width: 3rem;
-} */
-
-
-
-.anchor-icon:nth-child(1), .anchor-icon:nth-child(2) {
+.popper {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
     margin-right: 1.8rem;
 }
+
+.popper:hover .popper-geral {
+    display: block;
+}
+
+/* .popper .anchor-icon:nth-child(1), .popper .anchor-icon:nth-child(2) {
+    margin-right: 1.8rem;
+} */
 
 .icon {
     width: 1.8rem;
@@ -148,4 +150,61 @@ div, input, button, span {
 
 .icon:hover {
     color: rgba(0,0,0,1);
+}
+
+.popper-geral {
+    position: absolute;
+    display: none;
+    top: 100%;
+    right: 0;
+    width: 25rem;
+    background: var(--color-background);
+    box-shadow: 0 0 3px rgba(0,0,0,.6);
+    cursor: default;
+    padding: 20px;
+}
+
+.popper-geral .button-popper-styled {
+    width: 100%;
+    padding: .8rem;
+    cursor: pointer;
+    background: var(--color-secondary);
+    border: none;
+    border-radius: 6px;
+    letter-spacing: 1.2px;
+    transition: background .25s linear;
+}
+
+.popper-geral .button-popper-styled a {
+    text-decoration: none;
+    font: 700 1rem Montserrat;
+    color: white;
+}
+
+.popper-geral .button-popper-styled:hover {
+    background: var(--color-secondary-dark);
+}
+
+.popper-geral #span-title-cart-empty {
+    margin-bottom: 1rem;
+    margin-top: .2rem;
+    color: rgba(0,0,0,.5);
+}
+
+.popper-geral .button-popper-styled-diff {
+    background: transparent;
+    border: none;
+}
+
+.popper-geral .button-popper-styled-diff a {
+    text-decoration: none;
+    font: 600 .9rem Montserrat;
+    color: var(--color-secondary);
+    transition: color .25s linear;
+}
+
+.popper-geral .button-popper-styled-diff a:hover {
+    text-decoration: none;
+    font: 600 .9rem Montserrat;
+    color: var(--color-secondary-dark);
 }

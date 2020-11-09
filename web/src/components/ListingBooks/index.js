@@ -34,10 +34,12 @@ const ListingBooks = ({ modules }) => {
     return (
         <>
             <div className="container-grid-listBook">
-                {selected === 'BS' && <BestSeller />}
-                {selected === 'BO' && <BestOffer />}
-                {selected === 'PO' && <PreOrder />}
-                {selected === 'RL' && <Release />}
+                <div className="listbook-row">
+                    {selected === 'BS' && <BestSeller />}
+                    {selected === 'BO' && <BestOffer />}
+                    {selected === 'PO' && <PreOrder />}
+                    {selected === 'RL' && <Release />}
+                </div>
                 <div className="container-grid-more-books">
                     <button className="button-show-more">
                         Show More

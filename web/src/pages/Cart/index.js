@@ -12,7 +12,7 @@ import Header from '../../components/Header';
 
 // import { Link } from 'react-router-dom';
 
-function Cart() {
+const Cart = () => {
 
 
     const initClose = useRef(true);
