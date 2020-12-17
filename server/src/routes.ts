@@ -2,13 +2,16 @@ import express from 'express';
 import BooksController from './controllers/BooksController';
 import ItensCartController from './controllers/ItensCartController';
 import UsersController from './controllers/UsersController';
-import AuthMid from './middleware/auth';
+import BestSellerController from './controllers/BestSellerController';
+
+// import AuthMid from './middleware/auth';
 
 import db from './database/connection';
 
 const usersController = new UsersController();
 const booksController = new BooksController();
 const itensCartController = new ItensCartController();
+const bestSellerController = new BestSellerController();
 const routes = express.Router();
 
 // routes.get('/admin/products', itensController.index);
@@ -27,6 +30,10 @@ routes.post('/user/cart', itensCartController.create);
 routes.get('/user/cart', itensCartController.index);
 //Excluir um item no carrinho
 routes.delete('/user/cart', itensCartController.destroy);
+
+
+//Listar os best sellers
+routes.get('/index/bestsellers/:quantity', bestSellerController.index);
 
 //Retorna os dados 
 routes.get('/bestsellers/:quantity', async (request, response) => {

@@ -60,30 +60,41 @@ export default class UsersController {
             });
 
         if(pwds.length === 0) {
-            return response.send({auth: false, msg: "Usuário ou senha inválido"});
+            return response.send({auth: false, msg: "Usuário não encontrado!"});
         }
 
         const pwd = pwds[0];
 
-        const ids = await db.select('id')
-            .from('users')
-            .where({
-                name
-            });
+        try {
 
-        const id = ids[0].id;
+            const ids = await db.select('id')
+                .from('users')
+                .where({
+                    name
+                });
+    
+            const id = ids[0].id;
+    
+            const cart_ids = await db.select('id')
+                .from('carts')
+                .where({
+                    id_user: id
+                });
 
-        const cart_ids = await db.select('id')
-            .from('carts')
-            .where({
-                id_user: id
-            })
+            const cart_id = cart_ids[0].id;
 
-        const cart_id = cart_ids[0].id;
+            const validate = authmid.login(id, cart_id, password, pwd.password);
+            
+            return response.status(200).json(validate);
+            
+        }
+        catch(err) {
+            console.log({err});
+            return response.status(200).json({err});
+        }
 
-        const validate = authmid.login(id, cart_id, password, pwd.password);
-        
-        return response.status(200).json(validate);
+
+
     }
 
     // Responsável pela criação do usuário => register

@@ -34,21 +34,7 @@ function Login() {
         password: yup.string().required()
     });
 
-    // const handleEnter = (e, next) => {
-    //     const {key} = e;
-
-    //     if(key === "Enter") {
-    //         if(next) {
-
-    //         }
-    //     }
-    // }
-
     const handleSubmit = () => {
-        
-        // if(name.search(/@/i) === -1) {
-            
-        // }
 
         let form = {
             name,
@@ -68,10 +54,16 @@ function Login() {
                     })
                     .then(res => {
                         const { token, auth, msg } = res.data;
+                        const deadline = {
+                            start: Date.now(),
+                            end: Date.now() + 600000
+                            // end: Date.now() + 10000
+                        }
                         if(auth) {
                             console.log('token recebido com sucesso');
                             localStorage.setItem('token-user', token);
                             localStorage.setItem('isLogged', true);
+                            localStorage.setItem('deadline', JSON.stringify(deadline));
                             history.push('/');
                         } else {
                             setAnyNotification(true);

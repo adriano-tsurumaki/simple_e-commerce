@@ -19,6 +19,14 @@ function addAnyMessage(msg, alert) {
     }
 }
 
+function restoreTimer() {
+    const deadline = {
+        start: Date.now(),
+        end: Date.now() + 600000
+    }
+    localStorage.setItem('deadline', JSON.stringify(deadline));
+}
+
 const StarsRating = value => {
     const rating = parseFloat(value.rating);
     let starFill = Math.trunc(rating);
@@ -46,25 +54,43 @@ const BestSeller = ({ alertMsg, dispatch }) => {
     const history = useHistory();
 
     const handleAddCart = (id) => {
-        const token = localStorage.getItem('token-user');
-        axios.defaults.headers.authorization = `Bearer ${token}`;
-        axios.post('user/cart', {id_book: id})
-            .then((res) => {
-                const { auth, redirectForLogin } = res.data;
-                if(redirectForLogin) {
-                    dispatch(addAnyMessage(res.data.msg, 'info'));
-                    history.push('/login');
-                } else if(!auth) {
-                    dispatch(addAnyMessage(res.data.msg, 'warning'));
-                } else {
-                    dispatch(addAnyMessage(res.data.msg, 'success'));
-                }
-                
-            })
-            .catch((err) => {
-                console.log('Catch: ' + err.res.data.error)
-            })
-        delete axios.defaults.headers["authorization"];
+
+        const deadline = JSON.parse(localStorage.getItem('deadline'));
+
+        if(deadline !== null) {
+            const { end } = deadline;
+            const now = Date.now();
+            if(now >= end) {
+                console.log({now: new Date(now), end: new Date(end)});
+                console.log('O limite chegou');            
+
+                const token = localStorage.getItem('token-user');
+                axios.defaults.headers.authorization = `Bearer ${token}`;
+                axios.post('user/cart', {id_book: id})
+                    .then((res) => {
+                        const { auth, redirectForLogin } = res.data;
+                        if(redirectForLogin) {
+                            dispatch(addAnyMessage(res.data.msg, 'info'));
+                            history.push('/login');
+                        } else if(!auth) {
+                            dispatch(addAnyMessage(res.data.msg, 'warning'));
+                        } else {
+                            dispatch(addAnyMessage(res.data.msg, 'success'));
+                        }
+                        
+                    })
+                    .catch((err) => {
+                        console.log('Catch: ' + err.res.data.error)
+                    })
+                delete axios.defaults.headers["authorization"];
+
+            }
+            restoreTimer();
+        }
+        else {
+            //O usuário entra no site pela primeira vez
+
+        }
     }
 
     useEffect(() => {

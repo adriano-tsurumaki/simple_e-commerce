@@ -92,7 +92,8 @@ export default class ItensCartController {
             return response.status(200).send({
                 auth: false,
                 redirectForLogin: true,
-                session: 'Token is expired!'
+                session: 'Token is expired!',
+                msg: 'Log in to continue'
             });
         }
 
